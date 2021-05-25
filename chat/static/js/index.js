@@ -115,6 +115,11 @@
       console.log("error", error.message);
     }
     // counsellor part
+    // counsellor part
+    // counsellor part
+    // counsellor part
+    // counsellor part
+    // counsellor part
   } else {
     let index;
     const renderCounsellorMessage = async (event) => {
@@ -140,7 +145,7 @@
               await botui.message.add({
                 loading: false,
                 human: false,
-                photo: pollyImg,
+                photo: clientImg,
                 content: event.message.content,
               });
             }
@@ -168,7 +173,7 @@
       const text = document.getElementById("message-text");
 
       botui.message.human({
-        photo: clientImg,
+        photo: pollyImg,
         content: text.value,
       });
 
