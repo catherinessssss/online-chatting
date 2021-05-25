@@ -1,0 +1,187 @@
+<!--<!DOCTYPE html>-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Online Chatting</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+
+    {% load static %} {% comment %}
+    <script src="{% static 'botui-master/build/botui.js' %}"></script>
+    <link
+      rel="stylesheet"
+      href="{% static 'botui-master/build/botui.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'botui-master/build/botui-theme-default.css' %}"
+    />
+    {% endcomment %} {% comment %}
+    <link
+      href="{% static 'fontawesome-free-5.15.3-web/css/all.css' %}"
+      rel="stylesheet"
+    />
+    {% endcomment %} {% load static %}
+    <script src="{% static 'botui-master/build/botui.js' %}"></script>
+    <link
+      rel="stylesheet"
+      href="{% static 'botui-master/build/botui.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'botui-master/build/botui-theme-default.css' %}"
+    />
+    <link
+      href="{% static 'fontawesome-free-5.15.3-web/css/all.css' %}"
+      rel="stylesheet"
+    />
+
+    {% comment %} <script src="{% static 'zulip/lib/index.js' %}"></script> {% endcomment %}
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://malsup.github.io/jquery.form.js"></script>
+
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <style type="text/css"></style>
+
+  {% block body %}
+
+  <body>
+    <div class="container">
+      <div class="row" style="height: 100%">
+        <div class="col-md-3"></div>
+        <div
+          class="col-md-6"
+          style="margin: auto; height: 80%; overflow-y: scroll"
+        >
+          <div
+            id="chatbox"
+            style="min-height: 600px; background: white; height: 100%"
+          >
+            <div id="chat-message" style="height: calc(100% - 38px)">
+              <bot-ui style="background-color: aliceblue"></bot-ui>
+            </div>
+            <div id="send-message">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter your text here"
+                  aria-label="Enter your text here"
+                  aria-describedby="button-addon2"
+                />
+                <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/>
+                <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="button-addon2"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+  </body>
+  {% endblock body %} {% block javascript %} {% load static %}
+  <script>
+    const student_email = "{{student_email}}";
+    const key = "{{key}}";
+    const is_student = "{{is_student}}";
+    const staff_email = "{{staff_email}}";
+
+    localStorage.setItem('is_student', is_student);
+    localStorage.setItem('student_email', student_email);
+    localStorage.setItem('key', key);
+    if (!!staff_email) {
+        localStorage.setItem('staff_email', staff_email);
+        const stream = "{{stream_name}}"
+        window.location.hash = stream;
+    }
+
+    const botui = new BotUI("chatbox");
+    const content = document.getElementsByTagName("chatbox");
+  </script>
+  {% load render_bundle from webpack_loader %}
+  {% render_bundle 'main' 'js' %}
+  <script>
+    
+    {% comment %} const queryString = new URLSearchParams(location.search); {% endcomment %}
+    {% comment %} console.log({% page_info.key %}) {% endcomment %}
+    {% comment %} const isStudent = queryString.get("is_student") === "true";
+    const staffId = queryString.get("staff_id");
+    const studentId = queryString.get("student_id"); {% endcomment %}
+    
+    
+
+
+    {% comment %} const isStudent = "true";
+    const staffId = '1';
+    const studentId = '2';
+
+     if (
+      ["true", "false"].includes(isStudent) &&
+      !!staffId &&
+      !!studentId
+    ) {
+        
+      window.location.href = `create_chatroom?is_student=${isStudent}&staff_id=${staffId}&student_id=${studentId}`;
+    } else {
+      alert("The link is invalid.");
+    }  {% endcomment %}
+
+    {% comment %} if (
+      ["true", "false"].includes(queryString.get("is_student")) &&
+      !!staffId &&
+      !!studentId
+    ) {
+      window.location.href = 'chatroom';
+    } else {
+      alert("The link is invalid.");
+    } {% endcomment %}
+
+    {% comment %} Replace realm url {% endcomment %}
+    {% comment %} const student_email = "{{student_email}}"
+    const key = "{{key}}"
+    const is_student = "{{is_student}}"
+    if (is_student == "True") {
+        const config = {
+            username: student_email,
+            apiKey: key,
+            realm: "https://zulip.cat"
+        }
+    }
+
+    (async () => {
+    const client = await zulip(config);
+    // The zulip object now contains the API Key
+    console.log(await client.streams.subscriptions.retrieve());
+    })();
+
+
+    const botui = new BotUI("chatbox");
+    const content = document.getElementsByTagName("chatbox"); {% endcomment %}
+    
+  </script>
+  {% endblock javascript %}
+</html>
