@@ -8,22 +8,20 @@
   const pollyImg = document.getElementById("polly-img").value;
   const clientImg = document.getElementById("client-img").value;
 
-  // mock data
-  botui.message.human({
-    delay: 500,
-    photo: clientImg,
-    content: "No",
-  });
-  botui.message.add({
-    delay: 500,
-    photo: pollyImg,
-    content: "No",
-  });
-
   if (isStudent == "true") {
     let index;
     let stream = "";
     let staffEmail = "";
+
+    botui.message.add({
+      delay: 500,
+      photo: pollyImg,
+      content: "Please wait a moment, I am coming soon...",
+    });
+
+    const chatDiv = document.getElementById("send-message-div");
+    chatDiv.style.visibility = "hidden";
+
     const renderStudentMessage = async (event) => {
       switch (event.type) {
         case "typing":
@@ -50,6 +48,7 @@
                 stream = event.message.display_recipient;
                 staffEmail = stream.substr(stream.indexOf("_") + 1);
                 window.location.hash = stream;
+                chatDiv.style.visibility = "";
               }
               await botui.message.add({
                 loading: false,
