@@ -83,6 +83,7 @@
                   placeholder="Enter your text here"
                   aria-label="Enter your text here"
                   aria-describedby="button-addon2"
+                  id="message-text"
                 />
                 <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/>
                 <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
@@ -90,7 +91,7 @@
                   <button
                     class="btn btn-outline-secondary"
                     type="button"
-                    id="button-addon2"
+                    id="send-message-btn"
                   >
                     Send
                   </button>
@@ -125,62 +126,6 @@
   {% load render_bundle from webpack_loader %}
   {% render_bundle 'main' 'js' %}
   <script>
-    
-    {% comment %} const queryString = new URLSearchParams(location.search); {% endcomment %}
-    {% comment %} console.log({% page_info.key %}) {% endcomment %}
-    {% comment %} const isStudent = queryString.get("is_student") === "true";
-    const staffId = queryString.get("staff_id");
-    const studentId = queryString.get("student_id"); {% endcomment %}
-    
-    
-
-
-    {% comment %} const isStudent = "true";
-    const staffId = '1';
-    const studentId = '2';
-
-     if (
-      ["true", "false"].includes(isStudent) &&
-      !!staffId &&
-      !!studentId
-    ) {
-        
-      window.location.href = `create_chatroom?is_student=${isStudent}&staff_id=${staffId}&student_id=${studentId}`;
-    } else {
-      alert("The link is invalid.");
-    }  {% endcomment %}
-
-    {% comment %} if (
-      ["true", "false"].includes(queryString.get("is_student")) &&
-      !!staffId &&
-      !!studentId
-    ) {
-      window.location.href = 'chatroom';
-    } else {
-      alert("The link is invalid.");
-    } {% endcomment %}
-
-    {% comment %} Replace realm url {% endcomment %}
-    {% comment %} const student_email = "{{student_email}}"
-    const key = "{{key}}"
-    const is_student = "{{is_student}}"
-    if (is_student == "True") {
-        const config = {
-            username: student_email,
-            apiKey: key,
-            realm: "https://zulip.cat"
-        }
-    }
-
-    (async () => {
-    const client = await zulip(config);
-    // The zulip object now contains the API Key
-    console.log(await client.streams.subscriptions.retrieve());
-    })();
-
-
-    const botui = new BotUI("chatbox");
-    const content = document.getElementsByTagName("chatbox"); {% endcomment %}
     
   </script>
   {% endblock javascript %}
