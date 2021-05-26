@@ -8,7 +8,15 @@
   const pollyImg = document.getElementById("polly-img").value;
   const clientImg = document.getElementById("client-img").value;
 
-  if (isStudent == "true") {
+  $(document).on("keyup", "#message-text", (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      event.target.blur();
+      document.getElementById("send-message-btn").click();
+    }
+  });
+
+  if (isStudent === "True") {
     let index;
     let stream = "";
     let staffEmail = "";

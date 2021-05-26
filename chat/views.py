@@ -9,14 +9,14 @@ client = ZulipClient(config_file=config_file)
 def index(request):
 
     # try:
-        is_student = request.GET.get('is_student', 'false')
-        staff_netid = request.GET.get('staff_netid', '10')
+        staff_netid = request.GET.get('staff_netid', None)
         student_netid = request.GET.get('student_netid', '21')
         student_email = student_netid + '@zulip.com'
-        staff_email = staff_netid + '@zulip.com'
+
+        is_student = True if staff_netid is None else False
 
         users = client.get_users()
-        if is_student == 'true':
+        if is_student == True:
             student = next((user for user in users['members'] if user['email'] == student_email), None)
             if student is None:
                 client.create_user(student_email, student_netid)
@@ -26,10 +26,11 @@ def index(request):
                 'is_student': is_student,
                 'student_email': student_email,
                 'student_netid': student_netid,
-                # 'staff_email': staff_email,
-                # 'staff_netid': staff_netid,
             }
         else:
+            # Mock data
+            staff_netid = '10'
+            staff_email = staff_netid + '@zulip.com'
             # TODO no need to create staff user every time
             staff = next((user for user in users['members'] if user['email'] == staff_email), None)
             if staff is None:
