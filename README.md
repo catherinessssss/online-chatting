@@ -6,10 +6,13 @@ Django framework integrate with Zulip's API
 
 ## Usage
 
-| Role | Url | Documentation |
+| Role | API | Documentation |
 | --- | --- | --- |
-| Student | GET `?student_netid=test_student` | Student chatting flow. `student_netid` is required. |
-| Counsellor | GET `?student_netid=test_student&staff_netid=test_staff` | Counsellor chatting flow.  Both `student_netid` and `staff_netid` are required.|
+| Student | GET `?student_netid=test_student` | Student chatting page. |
+| Counsellor | GET `?student_netid=test_student&staff_netid=test_staff` | Counsellor chatting page.|
+| Counsellor | POST `/leave_room` | Its params are: `staff_netid: str`; `student_netid: str`. Both are required.|
+| Supervisor | POST `/join_stream` | Its params are: `staff_netid: str`; `student_netid: str`; `subscribers_netid: List[str]`. All of them are required.|
+
 
 
 
