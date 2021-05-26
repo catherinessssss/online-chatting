@@ -35,8 +35,9 @@ def index(request):
             staff = next((user for user in users['members'] if user['email'] == staff_email), None)
             if staff is None:
                 client.create_user(staff_email, staff_netid)
+            
+            # We will use `${student_email}_${staff_email}` to construct the stream name.
             stream_name = client.create_stream(user_ids=[student_email, staff_email])
-            print("stream_name", stream_name)
             key = client.fetch_user_api_key(staff_email, staff_email)
 
             page_info = {
@@ -53,22 +54,3 @@ def index(request):
         return render(request, 'chat/index.html', page_info)
     # except Exception e:
     #     print(e)
-
-
-
-def create_chatroom(request):
-    is_student = request.GET.get('is_student')
-    staff_id = request.GET.get('staff_id')
-    student_id = request.GET.get('student_id')
-
-    print('is_student', is_student)
-    print('staff_id', staff_id)
-    print('student_id', student_id)
-
-    return render(request, 'chat/chatroom.html')
-
-
-def chatroom(request):
-    print(dir(request))
-    
-    return render(request, 'chat/chatroom.html')
