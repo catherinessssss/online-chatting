@@ -11,7 +11,6 @@ class ZulipClient:
         users = self.client.get_users()
         return users
 
-
     def create_user(self, username, name):
         data = {
             "email": username,
@@ -22,41 +21,75 @@ class ZulipClient:
 
         response = self.client.create_user(data)
         if response['result'] == 'error':
-            raise Exception('Cannot create user {username}: {error}'.format(username=username, error=response['msg']))
+            raise Exception('Cannot create user {username}: {error}'.format(
+                username=username, error=response['msg']))
 
         return True
 
-    def create_stream(self, user_ids: List[str]):
-        name = "_".join(user_ids)
+    def create_stream(self, stream_name: str, user_ids: List[str]):
         response = self.client.add_subscriptions(
             streams=[
-                {"name": name, 
-                "description": "Stream for {name}".format(name=name)},
+                {"name": stream_name,
+                 "description": "Stream for {name}".format(name=stream_name)},
             ],
             principals=user_ids,
         )
         if response['result'] == 'error':
-            raise Exception('Cannot subsribe a steam')
-        return name
+            raise Exception('Cannot subsribe a steam: {error}'.format(
+                error=response['msg']))
+        return stream_name
 
-
-    def fetch_user_api_key(self, username: str, password:str):
+    def fetch_user_api_key(self, username: str, password: str):
         payload = {
             "username": username,
             "password": password,
         }
 
-        # TODO 
+        # TODO
         # replace the url
-        response = requests.post("https://zulip.cat/api/v1/fetch_api_key", data=payload, verify='./ssl/zulip.combined-chain.crt')
+        response = requests.post("https://zulip.cat/api/v1/fetch_api_key",
+                                 data=payload, verify='./ssl/zulip.combined-chain.crt')
         result = response.json()
         if response.status_code != 200:
-            raise Exception("Cannot get {username}'s api key: {error}".format(username=username, error=result.msg))
-        
-        return result['api_key']
+            raise Exception("Cannot get {username}'s api key: {error}".format(
+                username=username, error=result.msg))
 
+        return result['api_key']
 
     def get_user_presence(self, email: str):
         response = self.client.get_user_presence(email)
         print(response)
-        return 
+        return
+
+    def subscribe_stream(self, stream_name, subscribers: List[str]):
+        response = self.client.add_subscriptions(
+            streams=[
+                {"name": stream_name}
+            ],
+            principals=subscribers
+        )
+
+        if response['result'] == 'error':
+            raise Exception('Cannot subsribe {stream_name} steam: {error}'.format(
+                stream_name=stream_name,
+                error=response['msg']))
+        return True
+
+    def unsubscribe_stream(self, stream_name: str, unsubscribers: List[str]):
+        response = self.client.remove_subscriptions(
+            [stream_name],
+            principals=unsubscribers,
+        )
+
+        if response['result'] == 'error':
+            raise Exception('Cannot remove the subscription of {stream_name} steam: {error}'.format(
+                stream_name=stream_name,
+                error=response['msg']))
+        return True
+
+    def get_stream_id(self, stream_name):
+        return self.client.get_stream_id(stream_name)['stream_id']
+
+    def delete_stream(self, stream_id):
+        response = self.client.delete_stream(stream_id)
+        return response['result']
