@@ -23,10 +23,8 @@ Django framework integrate with Zulip's API
 #### TODO
 
 * Supervisor 
-    * /join
-    * /send_message
+    * chatting page
 * Leave chatting room
-    * delete stream
     * deactivate student (TBC)
 
 
