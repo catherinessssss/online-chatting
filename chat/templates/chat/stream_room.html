@@ -41,7 +41,9 @@
       rel="stylesheet"
     />
 
-    {% comment %} <script src="{% static 'zulip/lib/index.js' %}"></script> {% endcomment %}
+    {% comment %}
+    <script src="{% static 'zulip/lib/index.js' %}"></script>
+    {% endcomment %}
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://malsup.github.io/jquery.form.js"></script>
@@ -138,20 +140,15 @@
   </body>
   {% endblock body %} {% block javascript %} {% load static %}
   <script>
-    const isSupervisorPage = false;
-    const student_email = "{{student_email}}";
+    const isSupervisorPage = true;
+    const stream_id = {{stream_id}};
+    const stream_name = "{{stream_name}}";
     const key = "{{key}}";
-    const is_student = "{{is_student}}";
-    const staff_email = "{{staff_email}}";
+    const supervisor_email = "{{supervisor_email}}";
 
-    localStorage.setItem("is_student", is_student);
-    localStorage.setItem("student_email", student_email);
+    localStorage.setItem("supervisor_email", supervisor_email);
+    localStorage.setItem("stream_name", stream_name);
     localStorage.setItem("key", key);
-    if (!!staff_email) {
-      localStorage.setItem("staff_email", staff_email);
-      const stream = "{{stream_name}}";
-      window.location.hash = stream;
-    }
 
     const botui = new BotUI("chatbox");
     const content = document.getElementsByTagName("chatbox");

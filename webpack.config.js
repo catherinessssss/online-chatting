@@ -49,7 +49,11 @@ const plugins = [
 
 module.exports = {
   context: __dirname,
-  entry: ["@babel/polyfill", "./chat/static/js/index.js"],
+  entry: [
+    "@babel/polyfill",
+    "./chat/static/js/index.js",
+    "./chat/static/js/stream_room.js",
+  ],
   output: {
     path: path.resolve("./chat/static/dist/"),
     filename: "[name]-[hash].js",

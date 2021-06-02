@@ -39,7 +39,7 @@ def index(request):
             # Mock data
             staff_netid = '10'
             staff_email = staff_netid + '@zulip.com'
-            # TODO no need to create staff user every time
+
             staff = next(
                 (user for user in users['members'] if user['email'] == staff_email), None)
             if staff is None:
@@ -47,7 +47,7 @@ def index(request):
 
             # We will use `${student_email}_${staff_email}` to construct the stream name.
             stream_name = _construct_stream_name(
-                student_netid=student_email, staff_netid=staff_email)
+                student_email=student_email, staff_email=staff_email)
             client.create_stream(stream_name=stream_name, user_ids=[
                                  student_email, staff_email])
             key = client.fetch_user_api_key(staff_email, staff_email)
@@ -178,3 +178,37 @@ def delete_stream(request):
         })
     except Exception as e:
         return JsonResponse({'status': "error", "error": str(e)})
+
+
+@require_http_methods(['GET'])
+def join_stream_room(request):
+    try:
+        print(request.GET)
+        stream_name = request.GET.get('stream_name', None)
+        supervisor_netid = request.GET.get('supervisor_netid', None)
+
+        if stream_name is None or supervisor_netid is None:
+            raise('Please provide both stream name and supervisor email.')
+
+        stream_id = client.get_stream_id(stream_name)
+        supervisor_email = supervisor_netid + '@zulip.com'
+        
+        users = client.get_users()
+        supervisor = next(
+            (user for user in users['members'] if user['email'] == supervisor_email), None)
+        if supervisor is None:
+            client.create_user(supervisor_email, supervisor_netid)
+        key = client.fetch_user_api_key(supervisor_email, supervisor_email)
+        page_info = {
+            'key': key,
+            'stream_name': stream_name,
+            'supervisor_email': supervisor_email,
+            'supervisor_netid': supervisor_netid,
+            'stream_id': stream_id,
+        }
+
+        return render(request, 'chat/stream_room.html', page_info)
+
+
+    except Exception as e:
+        return e 
