@@ -139,24 +139,28 @@
   {% endblock body %} {% block javascript %} {% load static %}
   <script>
     const isSupervisorPage = false;
-    const isCounsellorPage = false;
-    const isStudentPage = true;
+    const isCounsellorPage = true;
+    const isStudentPage = false;
     const studentEmail = "{{student_email}}";
     const apiKey = "{{key}}";
+    const staffEmail = "{{staff_email}}";
 {% comment %} 
     localStorage.setItem("is_student", is_student);
     localStorage.setItem("student_email", student_email);
-    localStorage.setItem("key", key);
-    if (!!staff_email) {
-      localStorage.setItem("staff_email", staff_email);
-      const stream = "{{stream_name}}";
-      window.location.hash = stream;
-    } {% endcomment %}
+    localStorage.setItem("key", key); {% endcomment %}
+    {% comment %} if (!!staff_email) {
+      localStorage.setItem("staff_email", staff_email); {% endcomment %}
+    const streamName = "{{stream_name}}";
+    let streamId = "{{stream_id}}";
+    streamId = parseInt(streamId);
+    console.log('streamId', streamId);
+    {% comment %} window.location.hash = stream; {% endcomment %}
+    {% comment %} } {% endcomment %}
 
     const botui = new BotUI("chatbox");
     const content = document.getElementsByTagName("chatbox");
   </script>
   {% load render_bundle from webpack_loader %} {% render_bundle 'main' 'js' %}
-
+  <script></script>
   {% endblock javascript %}
 </html>

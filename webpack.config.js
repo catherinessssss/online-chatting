@@ -53,6 +53,7 @@ module.exports = {
     "@babel/polyfill",
     "./chat/static/js/index.js",
     "./chat/static/js/stream_room.js",
+    "./chat/static/js/counsellor.js",
   ],
   output: {
     path: path.resolve("./chat/static/dist/"),

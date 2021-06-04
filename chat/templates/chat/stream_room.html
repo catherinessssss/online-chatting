@@ -141,6 +141,8 @@
   {% endblock body %} {% block javascript %} {% load static %}
   <script>
     const isSupervisorPage = true;
+    const isCounsellorPage = false;
+    const isStudentPage = false;
     const stream_id = {{stream_id}};
     const stream_name = "{{stream_name}}";
     const key = "{{key}}";

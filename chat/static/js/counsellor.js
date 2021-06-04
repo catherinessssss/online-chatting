@@ -1,10 +1,9 @@
 (async () => {
-  if (!!isSupervisorPage) {
+  if (isCounsellorPage) {
     const zulip = require("zulip-js");
 
-    const supervisorEmail = localStorage.getItem("supervisor_email");
-    const apiKey = localStorage.getItem("key");
-    const stream_name = localStorage.getItem("stream_name");
+    // const studentEmail = localStorage.getItem("student_email");
+    // const apiKey = localStorage.getItem("key");
 
     const pollyImg = document.getElementById("polly-img").value;
     const clientImg = document.getElementById("client-img").value;
@@ -19,11 +18,12 @@
     });
 
     let index; // botui message id
+    // const staffEmail = localStorage.getItem("staff_email");
 
-    const renderSupervisorMessage = async (event) => {
+    const renderCounsellorMessage = async (event) => {
       switch (event.type) {
         case "typing":
-          if (event.sender.email !== supervisorEmail) {
+          if (event.sender.email !== staffEmail) {
             if (event.op === "start") {
               index = await botui.message.add({
                 loading: true,
@@ -38,7 +38,7 @@
           }
           break;
         case "message":
-          if (event.message.sender_email !== supervisorEmail) {
+          if (event.message.sender_email !== staffEmail) {
             if (event.message.type === "stream") {
               await botui.message.add({
                 loading: false,
@@ -53,7 +53,7 @@
     };
 
     const config = {
-      username: supervisorEmail,
+      username: staffEmail,
       apiKey: apiKey,
       realm: "https://zulip.cat",
     };
@@ -61,7 +61,7 @@
 
     const handleEvent = async (event) => {
       console.log("Got Event:", event);
-      renderSupervisorMessage(event);
+      renderCounsellorMessage(event);
     };
 
     // send message
@@ -75,7 +75,7 @@
         });
 
         const params = {
-          to: stream_name,
+          to: streamName,
           type: "stream",
           topic: "chat",
           content: text.value,
@@ -86,18 +86,16 @@
       })
       .on("focus", "#message-text", async () => {
         await client.typing.send({
-          to: [stream_id],
-          op: "start",
-          topic: "sao",
           type: "stream",
+          to: [studentEmail],
+          op: "start",
         });
       })
       .on("blur", "#message-text", async () => {
         await client.typing.send({
-          to: [stream_id],
-          op: "stop",
-          topic: "sao",
           type: "stream",
+          to: [studentEmail],
+          op: "stop",
         });
       });
 
