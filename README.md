@@ -8,12 +8,12 @@ Django framework integrate with Zulip's API
 
 | Role | API | Documentation |
 | --- | --- | --- |
-| Student | GET `?student_netid=test_student` | Student chatting page. |
-| Counsellor | GET `?student_netid=test_student&staff_netid=test_staff` | Counsellor chatting page.|
-| Supervisor| GET `join_stream_room?stream_name=test_stream_name&superviosr_netid=test_supervisor`| Supervisor chatting page. |
-| Counsellor | POST `/delete_stream` | `staff_netid: str`; <br> `student_netid: str`;<br>|
-| Supervisor | POST `/subscribe_stream` | `staff_netid: str`;<br>  `student_netid: str`; <br> `subscribers_netid: List[str];`<br>|
-| Supervisor | POST `/unsubscribe_stream` | `staff_netid: str`;<br>  `student_netid: str`; <br> `unsubscribers_netid: List[str];`<br>|
+| Student | GET `student?student_netid=test_student&staff_netid=test_staff` | Student chatting page. |
+| Counsellor | GET `counsellor?student_netid=test_student&staff_netid=test_staff` | Counsellor chatting page.|
+| Supervisor| GET `stream_room?stream_name=test_stream_name&superviosr_netid=test_supervisor`| Supervisor chatting page. |
+| Counsellor | POST `/delete_stream` | `staff_netid: str`; <br>|
+| Supervisor | POST `/subscribe_stream` | `staff_netid: str`;<br>  `subscribers_netid: List[str];`<br>|
+| Supervisor | POST `/unsubscribe_stream` | `staff_netid: str`;<br>  `unsubscribers_netid: List[str];`<br>|
 
 
 
@@ -22,10 +22,13 @@ Django framework integrate with Zulip's API
 
 #### TODO
 
+* Popup message for different role
+
 * Student/Consellor  
     * send typing info to the stream
 * Leave chatting room
-    * deactivate student (TBC)
+    * Leave button
+    * deactivate student -- see if we could write a schedule to delete user on daily basis
 
 
 

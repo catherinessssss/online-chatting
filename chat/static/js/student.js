@@ -20,19 +20,12 @@
 
     // student
     let index; // botui message id
-    let streamName = "";
-    let streamId = "";
-    let staffEmail = "";
-
-    botui.message.add({
-      delay: 500,
-      photo: pollyImg,
-      content: "Please wait a moment, I am coming soon...",
-    });
+    // let streamName = "";
+    // let staffEmail = "";
 
     // hide the input area in case student send a message before connecting to a counsellor
-    const chatDiv = document.getElementById("send-message-div");
-    chatDiv.style.visibility = "hidden";
+    // const chatDiv = document.getElementById("send-message-div");
+    // chatDiv.style.visibility = "hidden";
 
     // render student message when there is a event received
     const renderStudentMessage = async (event) => {
@@ -58,15 +51,15 @@
           if (event.message.sender_email !== studentEmail) {
             if (event.message.type === "stream") {
               // For the first time, retrive stream name
-              if (!streamName) {
-                streamName = event.message.display_recipient;
-                staffEmail = streamName
-                  .split("_")
-                  .find((item) => item !== studentEmail);
-                window.location.hash = streamName;
-                stream_id = event.message.stream_id;
-                chatDiv.style.visibility = "";
-              }
+              // if (!streamName) {
+              //   streamName = event.message.display_recipient;
+              //   staffEmail = streamName
+              //     .split("_")
+              //     .find((item) => item !== studentEmail);
+              //   window.location.hash = streamName;
+              //   stream_id = event.message.stream_id;
+              //   chatDiv.style.visibility = "";
+              // }
 
               // append the message
               await botui.message.add({
@@ -114,18 +107,20 @@
         text.value = "";
       })
       .on("focus", "#message-text", async () => {
-        console.log("staffEmail", staffEmail);
         await client.typing.send({
           // TODO update recipient
           to: [staffEmail],
           op: "start",
+          type: "stream",
+          topic: "chat",
         });
       })
       .on("blur", "#message-text", async () => {
-        console.log("staffEmail", staffEmail);
         await client.typing.send({
           to: [staffEmail],
           op: "stop",
+          type: "stream",
+          topic: "chat",
         });
       });
 

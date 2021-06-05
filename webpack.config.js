@@ -51,7 +51,7 @@ module.exports = {
   context: __dirname,
   entry: [
     "@babel/polyfill",
-    "./chat/static/js/index.js",
+    "./chat/static/js/student.js",
     "./chat/static/js/stream_room.js",
     "./chat/static/js/counsellor.js",
   ],

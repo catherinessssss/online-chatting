@@ -89,6 +89,7 @@
           type: "stream",
           to: [studentEmail],
           op: "start",
+          topic: "chat",
         });
       })
       .on("blur", "#message-text", async () => {
@@ -96,6 +97,7 @@
           type: "stream",
           to: [studentEmail],
           op: "stop",
+          topic: "chat",
         });
       });
 

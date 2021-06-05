@@ -57,6 +57,9 @@
   </head>
 
   <style type="text/css">
+    .profil > img.agent {
+      content: unset
+    }
     .botui {
       height: auto;
       background: url("../static/Polly-graphics/general/general-bg.png")
@@ -143,15 +146,10 @@
     const isStudentPage = true;
     const studentEmail = "{{student_email}}";
     const apiKey = "{{key}}";
-{% comment %} 
-    localStorage.setItem("is_student", is_student);
-    localStorage.setItem("student_email", student_email);
-    localStorage.setItem("key", key);
-    if (!!staff_email) {
-      localStorage.setItem("staff_email", staff_email);
-      const stream = "{{stream_name}}";
-      window.location.hash = stream;
-    } {% endcomment %}
+    {% comment %} let streamId = "{{stream_id}}";
+    streamId = parseInt(streamId); {% endcomment %}
+    const staffEmail = "{{staff_email}}";
+    const streamName = "{{stream_name}}";
 
     const botui = new BotUI("chatbox");
     const content = document.getElementsByTagName("chatbox");

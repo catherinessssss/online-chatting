@@ -10,14 +10,17 @@ config_file = './.zuliprc'
 client = ZulipClient(config_file=config_file)
 
 
-def _construct_stream_name(student_email: str, staff_email: str):
-    return f"{student_email}_{staff_email}"
+def _construct_stream_name(staff_email: str):
+    return f"{staff_email}"
 
 
-def index(request):
+def student(request):
     try:
         student_netid = request.GET.get('student_netid', '21')
         student_email = student_netid + '@zulip.com'
+        staff_netid = request.GET.get('staff_netid', '10')
+        staff_email = staff_netid + '@zulip.com'
+        stream_name = _construct_stream_name(staff_email)
 
         users = client.get_users()
         student = next(
@@ -29,9 +32,13 @@ def index(request):
             'key': key,
             'student_email': student_email,
             'student_netid': student_netid,
+            # 'stream_id': stream_id,
+            'stream_name': stream_name,
+            'staff_netid': staff_netid,
+            'staff_email': staff_email,
         }
 
-        return render(request, 'chat/index.html', page_info)
+        return render(request, 'chat/student.html', page_info)
     except Exception as e:
         print(e)
 
@@ -44,19 +51,26 @@ def counsellor(request):
         staff_email = staff_netid + '@zulip.com'
 
         users = client.get_users()
-        
 
         staff = next(
             (user for user in users['members'] if user['email'] == staff_email), None)
         if staff is None:
             client.create_user(staff_email, staff_netid)
 
-        # We will use `${student_email}_${staff_email}` to construct the stream name.
+        # We will use `${staff_email}` to construct the stream name.
         stream_name = _construct_stream_name(
-            student_email=student_email, staff_email=staff_email)
-        client.create_stream(stream_name=stream_name, user_ids=[
-                                student_email, staff_email])
+            staff_email=staff_email)
+
         stream_id = client.get_stream_id(stream_name)
+        print('===', stream_id)
+        if stream_id is None:
+            client.create_stream(stream_name=stream_name, user_ids=[
+                student_email, staff_email])
+            stream_id = client.get_stream_id(stream_name)
+        else:
+            client.subscribe_stream(stream_name=stream_name,
+                                    subscribers=[staff_email, student_email])
+
         key = client.fetch_user_api_key(staff_email, staff_email)
 
         page_info = {
@@ -79,11 +93,11 @@ def counsellor(request):
 def subscribe_stream(request):
     request_data = json.loads(request.body)
     staff_netid = request_data['staff_netid']
-    student_netid = request_data['student_netid']
+    # student_netid = request_data['student_netid']
     subscribers = request_data['subscribers_netid']
 
     staff_email = staff_netid + '@zulip.com'
-    student_email = student_netid + '@zulip.com'
+    # student_email = student_netid + '@zulip.com'
     # subscribers = [item + '@zulip.com' for item in subscribers]
 
     users = client.get_users()
@@ -101,19 +115,27 @@ def subscribe_stream(request):
         subscribers_email.append(subscriber_email)
 
     stream_name = _construct_stream_name(
-        student_email=student_email,
         staff_email=staff_email
     )
 
     try:
-        client.subscribe_stream(stream_name=stream_name,
-                                subscribers=subscribers_email)
-        return JsonResponse({
-            'status': 'success',
-            'content': {
-                'stream_name': stream_name
-            }
-        })
+        response = client.subscribe_stream(stream_name=stream_name,
+                                           subscribers=subscribers_email)
+
+        if response['result'] == 'error':
+            return JsonResponse({
+                'status': 'success',
+                'content': {
+                    'result': response
+                }
+            })
+        else:
+            return JsonResponse({
+                'status': 'success',
+                'content': {
+                    'stream_name': stream_name
+                }
+            })
     except Exception as e:
         return JsonResponse({'status': "error", "error": str(e)})
 
@@ -123,11 +145,11 @@ def subscribe_stream(request):
 def unsubscribe_stream(request):
     request_data = json.loads(request.body)
     staff_netid = request_data['staff_netid']
-    student_netid = request_data['student_netid']
+    # student_netid = request_data['student_netid']
     unsubscribers = request_data['unsubscribers_netid']
 
     staff_email = staff_netid + '@zulip.com'
-    student_email = student_netid + '@zulip.com'
+    # student_email = student_netid + '@zulip.com'
 
     users = client.get_users()
     subscribers_email = []
@@ -142,19 +164,27 @@ def unsubscribe_stream(request):
         subscribers_email.append(subscriber_email)
 
     stream_name = _construct_stream_name(
-        student_email=student_email,
-        staff_email=staff_email
+        staff_email=staff_email,
     )
 
     try:
-        client.unsubscribe_stream(
+        response = client.unsubscribe_stream(
             stream_name=stream_name, unsubscribers=subscribers_email)
-        return JsonResponse({
-            'status': 'success',
-            'content': {
-                'stream_name': stream_name
-            }
-        })
+
+        if response['result'] == 'error':
+            return JsonResponse({
+                'status': 'error',
+                'content': {
+                    'result': response
+                }
+            })
+        else:
+            return JsonResponse({
+                'status': 'success',
+                'content': {
+                    'stream_name': stream_name
+                }
+            })
     except Exception as e:
         return JsonResponse({'status': "error", "error": str(e)})
 
@@ -164,33 +194,37 @@ def unsubscribe_stream(request):
 def delete_stream(request):
     request_data = json.loads(request.body)
     staff_netid = request_data['staff_netid']
-    student_netid = request_data['student_netid']
-
     staff_email = staff_netid + '@zulip.com'
-    student_email = student_netid + '@zulip.com'
 
     stream_name = _construct_stream_name(
-        student_email=student_email,
         staff_email=staff_email
     )
 
     try:
         stream_id = client.get_stream_id(stream_name=stream_name)
         result = client.delete_stream(stream_id=stream_id)
-        return JsonResponse({
-            'status': 'success',
-            'content': {
-                'stream_name': stream_name
-            }
-        })
+
+        if result['result'] == 'success':
+            return JsonResponse({
+                'status': 'success',
+                'content': {
+                    'stream_name': stream_name
+                }
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'content': {
+                    'result': result
+                }
+            })
     except Exception as e:
         return JsonResponse({'status': "error", "error": str(e)})
 
 
 @require_http_methods(['GET'])
-def join_stream_room(request):
+def stream_room(request):
     try:
-        print(request.GET)
         stream_name = request.GET.get('stream_name', None)
         supervisor_netid = request.GET.get('supervisor_netid', None)
 
@@ -199,7 +233,7 @@ def join_stream_room(request):
 
         stream_id = client.get_stream_id(stream_name)
         supervisor_email = supervisor_netid + '@zulip.com'
-        
+
         users = client.get_users()
         supervisor = next(
             (user for user in users['members'] if user['email'] == supervisor_email), None)
@@ -216,6 +250,5 @@ def join_stream_room(request):
 
         return render(request, 'chat/stream_room.html', page_info)
 
-
     except Exception as e:
-        return e 
+        return e

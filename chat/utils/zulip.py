@@ -69,11 +69,7 @@ class ZulipClient:
             principals=subscribers
         )
 
-        if response['result'] == 'error':
-            raise Exception('Cannot subsribe {stream_name} steam: {error}'.format(
-                stream_name=stream_name,
-                error=response['msg']))
-        return True
+        return response
 
     def unsubscribe_stream(self, stream_name: str, unsubscribers: List[str]):
         response = self.client.remove_subscriptions(
@@ -81,15 +77,15 @@ class ZulipClient:
             principals=unsubscribers,
         )
 
-        if response['result'] == 'error':
-            raise Exception('Cannot remove the subscription of {stream_name} steam: {error}'.format(
-                stream_name=stream_name,
-                error=response['msg']))
-        return True
+        return response
 
     def get_stream_id(self, stream_name):
-        return self.client.get_stream_id(stream_name)['stream_id']
+        response = self.client.get_stream_id(stream_name)
+        if response['result'] == 'error':
+            print(f'stream name: {stream_name} not found')
+            return None
+        return response['stream_id']
 
     def delete_stream(self, stream_id):
         response = self.client.delete_stream(stream_id)
-        return response['result']
+        return response

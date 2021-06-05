@@ -57,6 +57,9 @@
   </head>
 
   <style type="text/css">
+    .profil > img.agent {
+      content: unset
+    }
     .botui {
       height: auto;
       background: url("../static/Polly-graphics/general/general-bg.png")
@@ -153,7 +156,6 @@
     const streamName = "{{stream_name}}";
     let streamId = "{{stream_id}}";
     streamId = parseInt(streamId);
-    console.log('streamId', streamId);
     {% comment %} window.location.hash = stream; {% endcomment %}
     {% comment %} } {% endcomment %}
 
