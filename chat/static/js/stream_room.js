@@ -49,6 +49,8 @@
             }
           }
           break;
+        default:
+          console.log("event", event);
       }
     };
 

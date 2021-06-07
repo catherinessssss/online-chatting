@@ -14,6 +14,9 @@ def _construct_stream_name(staff_email: str):
     return f"{staff_email}"
 
 
+def index(request):
+    return render(request, 'chat/index.html')
+
 def student(request):
     try:
         student_netid = request.GET.get('student_netid', '21')
@@ -239,6 +242,9 @@ def stream_room(request):
             (user for user in users['members'] if user['email'] == supervisor_email), None)
         if supervisor is None:
             client.create_user(supervisor_email, supervisor_netid)
+
+        client.subscribe_stream(stream_name=stream_name,
+                                subscribers=[supervisor_email])
         key = client.fetch_user_api_key(supervisor_email, supervisor_email)
         page_info = {
             'key': key,

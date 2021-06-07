@@ -71,6 +71,16 @@
             }
           }
           break;
+        case "stream":
+          if (event.op === "delete") {
+            await botui.message.add({
+              loading: false,
+              human: false,
+              photo: pollyImg,
+              content: "Thank you for using our service. Goodbye.",
+            });
+          }
+          console.log("event");
       }
     };
 

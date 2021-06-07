@@ -90,14 +90,6 @@
       background-color: #fccca5;
       border-radius: 10px 10px 10px 5px;
     }
-
-    #message-text {
-      margin: 0 20px;
-    }
-
-    #send-message-btn {
-      display: none
-    }
   </style>
 
   {% block body %}
@@ -116,30 +108,12 @@
           >
             <div id="chat-message" style="height: calc(100% - 38px)" class="botui">
               <div class="botui-header"></div>
-              <bot-ui>
-              </bot-ui>
-              <input
-                  type="text"
-                  class="botui-actions-text-input"
-                  placeholder="Enter your text here"
-                  aria-label="Enter your text here"
-                  aria-describedby="button-addon2"
-                  id="message-text"
-                />
+              <bot-ui></bot-ui>
             </div>
             <div id="send-message-div">
               <div class="input-group mb-3">
                 <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/> 
                 <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
-                <div class="input-group-append">
-                 <button
-                    class="btn btn-outline-secondary"
-                    type="button"
-                    id="send-message-btn"
-                  >
-                    Send
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -150,27 +124,35 @@
   </body>
   {% endblock body %} {% block javascript %} {% load static %}
   <script>
-    const isSupervisorPage = false;
-    const isCounsellorPage = true;
-    const isStudentPage = false;
-    const studentEmail = "{{student_email}}";
-    const apiKey = "{{key}}";
-    const staffEmail = "{{staff_email}}";
-{% comment %} 
-    localStorage.setItem("is_student", is_student);
-    localStorage.setItem("student_email", student_email);
-    localStorage.setItem("key", key); {% endcomment %}
-    {% comment %} if (!!staff_email) {
-      localStorage.setItem("staff_email", staff_email); {% endcomment %}
-    const streamName = "{{stream_name}}";
-    const streamId = {{stream_id}};
-    {% comment %} window.location.hash = stream; {% endcomment %}
-    {% comment %} } {% endcomment %}
+   
 
     const botui = new BotUI("chatbox");
     const content = document.getElementsByTagName("chatbox");
+
+    const polly = '{% static "Polly-graphics/general/general-polly.png" %}';
+    const client = '{% static "Polly-graphics/general/general-client.png" %}';
+
+    botui.message.add({
+        photo: polly,
+        content: 'Please wait, I am now finding a counsellor to chat with you.'
+    });
+
+    botui.message.add({
+        // delay: 10000,
+        photo: polly,
+        content: 'You have incoming online chat request, please <a target="_blank" href="student?student_netid=21&staff_netid=10">click</a> the link to enter the chat room.'
+    });
+    botui.message.add({
+        // delay: 15000,
+        photo: polly,
+        content: 'For counsellor, please <a target="_blank" href="counsellor?student_netid=21&staff_netid=10">click</a> the link to enter the chat room.'
+    });
+    botui.message.add({
+        // delay: 15000,
+        photo: polly,
+        content: 'For supervisor, please <a target="_blank" href="stream_room?stream_name=10@zulip.com&supervisor_netid=100">click</a> the link to enter the chat room.'
+    });
   </script>
-  {% load render_bundle from webpack_loader %} {% render_bundle 'main' 'js' %}
   <script></script>
   {% endblock javascript %}
 </html>

@@ -41,7 +41,9 @@
       rel="stylesheet"
     />
 
-    {% comment %} <script src="{% static 'zulip/lib/index.js' %}"></script> {% endcomment %}
+    {% comment %}
+    <script src="{% static 'zulip/lib/index.js' %}"></script>
+    {% endcomment %}
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://malsup.github.io/jquery.form.js"></script>
@@ -58,7 +60,7 @@
 
   <style type="text/css">
     .profil > img.agent {
-      content: unset
+      content: unset;
     }
     .botui {
       height: auto;
@@ -90,6 +92,14 @@
       background-color: #fccca5;
       border-radius: 10px 10px 10px 5px;
     }
+
+    #message-text {
+      margin: 0 20px;
+    }
+
+    #send-message-btn {
+      display: none
+    }
   </style>
 
   {% block body %}
@@ -106,20 +116,24 @@
             id="chatbox"
             style="min-height: 600px; background: white; height: 100%"
           >
-            <div id="chat-message" style="height: calc(100% - 38px)" class="botui">
+            <div
+              id="chat-message"
+              style="height: calc(100% - 38px)"
+              class="botui"
+            >
               <div class="botui-header"></div>
               <bot-ui></bot-ui>
+              <input
+                type="text"
+                class="botui-actions-text-input"
+                placeholder="Enter your text here"
+                aria-label="Enter your text here"
+                aria-describedby="button-addon2"
+                id="message-text"
+              />
             </div>
             <div id="send-message-div">
               <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter your text here"
-                  aria-label="Enter your text here"
-                  aria-describedby="button-addon2"
-                  id="message-text"
-                />
                 <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/> 
                 <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
                 <div class="input-group-append">
@@ -155,6 +169,5 @@
     const content = document.getElementsByTagName("chatbox");
   </script>
   {% load render_bundle from webpack_loader %} {% render_bundle 'main' 'js' %}
-
   {% endblock javascript %}
 </html>
