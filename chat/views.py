@@ -146,6 +146,7 @@ def subscribe_stream(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def unsubscribe_stream(request):
+    
     request_data = json.loads(request.body)
     staff_netid = request_data['staff_netid']
     # student_netid = request_data['student_netid']
@@ -228,11 +229,17 @@ def delete_stream(request):
 @require_http_methods(['GET'])
 def stream_room(request):
     try:
-        stream_name = request.GET.get('stream_name', None)
+        staff_netid = request.GET.get('staff_netid', None)
         supervisor_netid = request.GET.get('supervisor_netid', None)
 
-        if stream_name is None or supervisor_netid is None:
+        if staff_netid is None or supervisor_netid is None:
             raise('Please provide both stream name and supervisor email.')
+
+        staff_email = staff_netid + '@zulip.com'
+
+        stream_name = _construct_stream_name(
+            staff_email=staff_email
+        )
 
         stream_id = client.get_stream_id(stream_name)
         supervisor_email = supervisor_netid + '@zulip.com'
@@ -252,6 +259,7 @@ def stream_room(request):
             'supervisor_email': supervisor_email,
             'supervisor_netid': supervisor_netid,
             'stream_id': stream_id,
+            'staff_netid': staff_netid,
         }
 
         return render(request, 'chat/stream_room.html', page_info)

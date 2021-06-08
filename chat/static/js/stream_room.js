@@ -70,6 +70,10 @@
     $(document)
       .on("click", "#send-message-btn", async () => {
         const text = document.getElementById("message-text");
+        if (!text.value) {
+          text.focus();
+          return;
+        }
 
         botui.message.human({
           photo: pollyImg,
@@ -85,21 +89,52 @@
         await client.messages.send(params);
 
         text.value = "";
+        // text.focus();
+      })
+      .on("click", "#stream-leave-chatroom-btn", async () => {
+        const result = confirm("Are you sure you want to leave the chatroom?");
+        if (result == true) {
+          const response = await $.ajax({
+            url: "/chat/unsubscribe_stream",
+            method: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+              unsubscribers_netid: [supervisor_netid],
+              staff_netid: staff_netid,
+            }),
+          });
+
+          if (response.status == "success") {
+            if (navigator.userAgent.indexOf("MSIE") > 0) {
+              if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {
+                window.opener = null;
+                window.close();
+              } else {
+                window.open("", "_top");
+                window.top.close();
+              }
+            } else if (navigator.userAgent.indexOf("Firefox") > 0) {
+              window.location.href = "about:blank ";
+            } else {
+              window.opener = null;
+              window.open("", "_self", "");
+              window.close();
+            }
+          } else {
+            alert("Ops, Something wrong happened.");
+          }
+        }
       })
       .on("focus", "#message-text", async () => {
         await client.typing.send({
-          to: [stream_id],
+          to: [staff_email],
           op: "start",
-          topic: "sao",
-          type: "stream",
         });
       })
       .on("blur", "#message-text", async () => {
         await client.typing.send({
-          to: [stream_id],
+          to: [staff_email],
           op: "stop",
-          topic: "sao",
-          type: "stream",
         });
       });
 
