@@ -69,6 +69,11 @@
       .on("click", "#send-message-btn", async () => {
         const text = document.getElementById("message-text");
 
+        if (!text.value) {
+          text.focus();
+          return;
+        }
+
         botui.message.human({
           photo: pollyImg,
           content: text.value,
@@ -83,6 +88,28 @@
         await client.messages.send(params);
 
         text.value = "";
+      })
+      .on("click", "#counsellor-leave-chatroom-btn", async () => {
+        const result = confirm(
+          "Are you sure you want to end the conversation?"
+        );
+        if (result == true) {
+          const response = await $.ajax({
+            url: "/chat/unsubscribe_stream",
+            method: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+              unsubscribers_netid: [studentNetid],
+              staff_netid: staffNetid,
+            }),
+          });
+
+          if (response.status == "success") {
+            alert("You have successfully end the conversation.");
+          } else {
+            alert("Ops, Something wrong happened.");
+          }
+        }
       })
       .on("focus", "#message-text", async () => {
         await client.typing.send({

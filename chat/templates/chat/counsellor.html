@@ -91,12 +91,8 @@
       border-radius: 10px 10px 10px 5px;
     }
 
-    #message-text {
-      margin: 0 20px;
-    }
-
-    #send-message-btn {
-      display: none
+    .input-area  {
+      background: #eff7d7; 
     }
   </style>
 
@@ -118,17 +114,16 @@
               <div class="botui-header"></div>
               <bot-ui>
               </bot-ui>
-              <input
+            </div>
+              <div class="input-area input-group mb-3">
+                <input
                   type="text"
-                  class="botui-actions-text-input"
+                  class="form-control botui-actions-text-input"
                   placeholder="Enter your text here"
                   aria-label="Enter your text here"
                   aria-describedby="button-addon2"
                   id="message-text"
                 />
-            </div>
-            <div id="send-message-div">
-              <div class="input-group mb-3">
                 <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/> 
                 <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
                 <div class="input-group-append">
@@ -139,8 +134,14 @@
                   >
                     Send
                   </button>
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="counsellor-leave-chatroom-btn"
+                  >
+                    Leave
+                  </button>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -154,18 +155,12 @@
     const isCounsellorPage = true;
     const isStudentPage = false;
     const studentEmail = "{{student_email}}";
+    const studentNetid = "{{student_netid}}";
     const apiKey = "{{key}}";
     const staffEmail = "{{staff_email}}";
-{% comment %} 
-    localStorage.setItem("is_student", is_student);
-    localStorage.setItem("student_email", student_email);
-    localStorage.setItem("key", key); {% endcomment %}
-    {% comment %} if (!!staff_email) {
-      localStorage.setItem("staff_email", staff_email); {% endcomment %}
+    const staffNetid = "{{staff_netid}}";
     const streamName = "{{stream_name}}";
     const streamId = {{stream_id}};
-    {% comment %} window.location.hash = stream; {% endcomment %}
-    {% comment %} } {% endcomment %}
 
     const botui = new BotUI("chatbox");
     const content = document.getElementsByTagName("chatbox");

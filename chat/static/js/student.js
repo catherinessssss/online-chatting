@@ -50,17 +50,6 @@
         case "message":
           if (event.message.sender_email !== studentEmail) {
             if (event.message.type === "stream") {
-              // For the first time, retrive stream name
-              // if (!streamName) {
-              //   streamName = event.message.display_recipient;
-              //   staffEmail = streamName
-              //     .split("_")
-              //     .find((item) => item !== studentEmail);
-              //   window.location.hash = streamName;
-              //   stream_id = event.message.stream_id;
-              //   chatDiv.style.visibility = "";
-              // }
-
               // append the message
               await botui.message.add({
                 loading: false,
@@ -71,16 +60,31 @@
             }
           }
           break;
-        case "stream":
-          if (event.op === "delete") {
+        // case "stream":
+        //   if (event.op === "delete") {
+        //     await botui.message.add({
+        //       loading: false,
+        //       human: false,
+        //       photo: pollyImg,
+        //       content: "Thank you for using our service. Goodbye.",
+        //     });
+        //   }
+        //   break;
+        case "subscription":
+          if (event.op === "remove") {
             await botui.message.add({
               loading: false,
               human: false,
               photo: pollyImg,
               content: "Thank you for using our service. Goodbye.",
             });
+
+            staffEmail = "";
+            document.getElementById("send-message-div").style.visibility =
+              "hidden";
           }
-          console.log("event");
+        default:
+          console.log("event default", event);
       }
     };
 
@@ -100,6 +104,10 @@
     $(document)
       .on("click", "#send-message-btn", async () => {
         const text = document.getElementById("message-text");
+        if (!text.value) {
+          text.focus();
+          return;
+        }
 
         botui.message.human({
           photo: clientImg,

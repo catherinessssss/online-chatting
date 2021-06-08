@@ -6,6 +6,7 @@ import requests
 class ZulipClient:
     def __init__(self, config_file):
         self.client = zulip.Client(config_file=config_file)
+        self.admin_email = 'catherinedeveloper989@gmail.com'
 
     def get_users(self):
         users = self.client.get_users()
@@ -27,12 +28,16 @@ class ZulipClient:
         return True
 
     def create_stream(self, stream_name: str, user_ids: List[str]):
+        user_ids.append(self.admin_email)
+
         response = self.client.add_subscriptions(
             streams=[
                 {"name": stream_name,
                  "description": "Stream for {name}".format(name=stream_name)},
             ],
             principals=user_ids,
+            invite_only=True,
+            authorization_errors_fatal=False,
         )
         if response['result'] == 'error':
             raise Exception('Cannot subsribe a steam: {error}'.format(
@@ -62,11 +67,14 @@ class ZulipClient:
         return
 
     def subscribe_stream(self, stream_name, subscribers: List[str]):
+        subscribers.append(self.admin_email)
         response = self.client.add_subscriptions(
             streams=[
                 {"name": stream_name}
             ],
-            principals=subscribers
+            principals=subscribers,
+            invite_only=True,
+            authorization_errors_fatal=False,
         )
 
         return response

@@ -93,13 +93,6 @@
       border-radius: 10px 10px 10px 5px;
     }
 
-    #message-text {
-      margin: 0 20px;
-    }
-
-    #send-message-btn {
-      display: none
-    }
   </style>
 
   {% block body %}
@@ -123,17 +116,17 @@
             >
               <div class="botui-header"></div>
               <bot-ui></bot-ui>
-              <input
-                type="text"
-                class="botui-actions-text-input"
-                placeholder="Enter your text here"
-                aria-label="Enter your text here"
-                aria-describedby="button-addon2"
-                id="message-text"
-              />
             </div>
             <div id="send-message-div">
               <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control botui-actions-text-input"
+                  placeholder="Enter your text here"
+                  aria-label="Enter your text here"
+                  aria-describedby="button-addon2"
+                  id="message-text"
+                />
                 <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/> 
                 <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
                 <div class="input-group-append">
@@ -162,7 +155,7 @@
     const apiKey = "{{key}}";
     {% comment %} let streamId = "{{stream_id}}";
     streamId = parseInt(streamId); {% endcomment %}
-    const staffEmail = "{{staff_email}}";
+    let staffEmail = "{{staff_email}}";
     const streamName = "{{stream_name}}";
 
     const botui = new BotUI("chatbox");
