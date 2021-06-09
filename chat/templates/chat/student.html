@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Online Chatting</title>
+    <title>Student - Online Chatting</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
@@ -63,7 +63,7 @@
       content: unset;
     }
     .botui {
-      height: auto;
+      height: calc(70% + 38px);
       background: url("../static/Polly-graphics/general/general-bg.png")
         no-repeat center center #eff7d7;
       background-size: cover;
@@ -129,6 +129,7 @@
                 />
                 <input hidden id="polly-img" value={% static "Polly-graphics/general/general-polly.png" %}/> 
                 <input hidden id="client-img" value={% static "Polly-graphics/general/general-client.png" %}/>
+                <input hidden id="supervisor-img" value={% static "Polly-graphics/autumn/autumn-polly.png" %}/>
                 <div class="input-group-append">
                   <button
                     class="btn btn-outline-secondary"

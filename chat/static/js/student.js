@@ -8,6 +8,7 @@
 
     const pollyImg = document.getElementById("polly-img").value;
     const clientImg = document.getElementById("client-img").value;
+    const supervisorImg = document.getElementById("supervisor-img").value;
 
     // Listen 'Enter' key press
     $(document).on("keyup", "#message-text", (event) => {
@@ -51,10 +52,15 @@
           if (event.message.sender_email !== studentEmail) {
             if (event.message.type === "stream") {
               // append the message
+              const photo =
+                event.message.sender_email === staffEmail
+                  ? pollyImg
+                  : supervisorImg;
+
               await botui.message.add({
                 loading: false,
                 human: false,
-                photo: pollyImg,
+                photo: photo,
                 content: event.message.content,
               });
             }
@@ -129,16 +135,12 @@
           // TODO update recipient
           to: [staffEmail],
           op: "start",
-          type: "stream",
-          topic: "chat",
         });
       })
       .on("blur", "#message-text", async () => {
         await client.typing.send({
           to: [staffEmail],
           op: "stop",
-          type: "stream",
-          topic: "chat",
         });
       });
 

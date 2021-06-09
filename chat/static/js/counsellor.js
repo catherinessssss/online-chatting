@@ -7,6 +7,7 @@
 
     const pollyImg = document.getElementById("polly-img").value;
     const clientImg = document.getElementById("client-img").value;
+    const supervisorImg = document.getElementById("supervisor-img").value;
 
     // Listen 'Enter' key press
     $(document).on("keyup", "#message-text", (event) => {
@@ -40,10 +41,14 @@
         case "message":
           if (event.message.sender_email !== staffEmail) {
             if (event.message.type === "stream") {
+              const photo =
+                event.message.sender_email === studentEmail
+                  ? clientImg
+                  : supervisorImg;
               await botui.message.add({
                 loading: false,
                 human: false,
-                photo: clientImg,
+                photo: photo,
                 content: event.message.content,
               });
             }

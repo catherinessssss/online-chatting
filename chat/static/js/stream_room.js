@@ -8,6 +8,7 @@
 
     const pollyImg = document.getElementById("polly-img").value;
     const clientImg = document.getElementById("client-img").value;
+    const supervisorImg = document.getElementById("supervisor-img").value;
 
     // Listen 'Enter' key press
     $(document).on("keyup", "#message-text", (event) => {
@@ -40,10 +41,14 @@
         case "message":
           if (event.message.sender_email !== supervisorEmail) {
             if (event.message.type === "stream") {
+              const photo =
+                event.message.sender_email === staffEmail
+                  ? pollyImg
+                  : clientImg;
               await botui.message.add({
                 loading: false,
                 human: false,
-                photo: clientImg,
+                photo: photo,
                 content: event.message.content,
               });
             }
@@ -76,7 +81,7 @@
         }
 
         botui.message.human({
-          photo: pollyImg,
+          photo: supervisorImg,
           content: text.value,
         });
 
@@ -100,30 +105,30 @@
             dataType: "json",
             data: JSON.stringify({
               unsubscribers_netid: [supervisor_netid],
-              staff_netid: staff_netid,
+              staff_netid: staffNetid,
             }),
           });
 
           if (response.status == "success") {
-            alert("You have successfully left the conversation.");
             document.getElementById("send-message-div").style.visibility =
               "hidden";
+            alert("You have successfully left the conversation.");
           } else {
             alert("Ops, Something wrong happened.");
           }
         }
       })
       .on("focus", "#message-text", async () => {
-        await client.typing.send({
-          to: [staff_email],
-          op: "start",
-        });
+        // await client.typing.send({
+        //   to: [staffEmail],
+        //   op: "start",
+        // });
       })
       .on("blur", "#message-text", async () => {
-        await client.typing.send({
-          to: [staff_email],
-          op: "stop",
-        });
+        // await client.typing.send({
+        //   to: [staffEmail],
+        //   op: "stop",
+        // });
       });
 
     try {

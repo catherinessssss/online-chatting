@@ -260,6 +260,7 @@ def stream_room(request):
             'supervisor_netid': supervisor_netid,
             'stream_id': stream_id,
             'staff_netid': staff_netid,
+            'staff_email': staff_email,
         }
 
         return render(request, 'chat/stream_room.html', page_info)

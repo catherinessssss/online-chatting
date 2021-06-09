@@ -27,7 +27,6 @@ Django framework integrate with Zulip's API
 * Student/Consellor  
     * send typing info to the stream, nice to have
 * Leave chatting room
-    * Leave button
     * deactivate student -- see if we could write a schedule to delete user on daily basis
 
 
