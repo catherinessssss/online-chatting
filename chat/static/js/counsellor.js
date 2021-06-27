@@ -29,11 +29,13 @@
               index = await botui.message.add({
                 loading: true,
                 human: false,
+                photo: clientImg,
               });
             } else {
               await botui.message.remove(index, {
                 loading: false,
                 human: false,
+                photo: clientImg,
               });
             }
           }
@@ -52,6 +54,15 @@
                 content: event.message.content,
               });
             }
+          }
+          break;
+        case "subscription":
+          // remove student
+          if (
+            event.op == "peer_remove" &&
+            !event.subscriptions.includes(studentEmail)
+          ) {
+            studentEmail = "";
           }
           break;
       }
@@ -117,19 +128,23 @@
         }
       })
       .on("focus", "#message-text", async () => {
+        if (!studentEmail) {
+          return;
+        }
+
         await client.typing.send({
-          type: "stream",
           to: [studentEmail],
           op: "start",
-          topic: "chat",
         });
       })
       .on("blur", "#message-text", async () => {
+        if (!studentEmail) {
+          return;
+        }
+
         await client.typing.send({
-          type: "stream",
           to: [studentEmail],
           op: "stop",
-          topic: "chat",
         });
       });
 

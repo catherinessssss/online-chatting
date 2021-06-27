@@ -245,8 +245,12 @@
 
     root.Vue.directive("botui-scroll", {
       inserted: function(el) {
-        _container.scrollTop = _container.scrollHeight;
-        el.scrollIntoView(true);
+        // _container.scrollTop = _container.scrollHeight;
+        // el.scrollIntoView(true);
+        const botuicontainer = document.getElementsByClassName(
+          "botui-container"
+        )[0];
+        botuicontainer.scrollTop = botuicontainer.scrollHeight;
       },
     });
 
@@ -258,7 +262,7 @@
 
     root.Vue.directive("botui-container", {
       inserted: function(el) {
-        _container = el;
+        // _container = el;
       },
     });
 
