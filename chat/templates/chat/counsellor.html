@@ -223,12 +223,14 @@
     }
 
     .botui-header {
+      position: sticky;
+      z-index: 1;
+      top: 0;
       background-color: #fcb040;
       display: inline-flex;
       flex-direction: row;
       padding: 10px 0px 0px 10px;
       border-radius: 15px 15px 0px 0px;
-      position: relative;
     }
 
     .botui-header-info {
@@ -336,7 +338,7 @@
                     />
                     <input hidden id="polly-img" value={% static "Polly-graphics/general/counsellor.png" %}/>
                     <input hidden id="client-img" value={% static "Polly-graphics/general/student.png" %}/>
-                    <input hidden id="supervisor-img" value={% static "Polly-graphics/autumn/autumn-polly.png" %}/>
+                    <input hidden id="supervisor-img" value={% static "Polly-graphics/general/supervisor.png" %}/>
                     <div class="input-group-append">
                       <button
                         class="btn btn-outline-secondary"
