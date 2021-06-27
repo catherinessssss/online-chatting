@@ -1,7 +1,8 @@
 {
     "name": "online-chatting",
     "scripts": {
-        "build": "HOT_RELOAD=1 webpack serve --mode development"
+        "build": "HOT_RELOAD=1 webpack serve --mode development",
+        "prod": "webpack --mode production --config webpack.prod.js"
     },
     "dependencies": {
         "@babel/polyfill": "^7.12.1",
