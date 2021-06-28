@@ -85,7 +85,7 @@
               content: "Thank you for using our service. Goodbye.",
             });
 
-            staffEmail = "";
+            // staffEmail = "";
             document.getElementById("send-message-div").style.visibility =
               "hidden";
           }

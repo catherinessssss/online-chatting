@@ -1,7 +1,7 @@
 {
     "name": "online-chatting",
     "scripts": {
-        "build": "HOT_RELOAD=1 webpack serve --mode development",
+        "build": "HOT_RELOAD=1 webpack serve --mode development --config webpack.config.js",
         "prod": "webpack --mode production --config webpack.prod.js"
     },
     "dependencies": {
