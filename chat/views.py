@@ -267,3 +267,37 @@ def stream_room(request):
 
     except Exception as e:
         return e
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def delete_stream_in_topic(request):
+    request_data = json.loads(request.body)
+    staff_netid = request_data['staff_netid']
+    staff_email = staff_netid + '@zulip.com'
+
+    stream_name = _construct_stream_name(
+        staff_email=staff_email
+    )
+
+    try:
+        stream_id = client.get_stream_id(stream_name=stream_name)
+        result = client.delete_stream_in_topic(stream_id=stream_id, topic='chat')
+
+        if result['result'] == 'success':
+            return JsonResponse({
+                'status': 'success',
+                'content': {
+                    'stream_name': stream_name,
+                    'topic': 'chat'
+                }
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'content': {
+                    'result': result
+                }
+            })
+    except Exception as e:
+        return JsonResponse({'status': "error", "error": str(e)})

@@ -2,9 +2,6 @@
   if (isCounsellorPage) {
     const zulip = require("zulip-js");
 
-    // const studentEmail = localStorage.getItem("student_email");
-    // const apiKey = localStorage.getItem("key");
-
     const pollyImg = document.getElementById("polly-img").value;
     const clientImg = document.getElementById("client-img").value;
     const supervisorImg = document.getElementById("supervisor-img").value;
@@ -19,7 +16,6 @@
     });
 
     let index; // botui message id
-    // const staffEmail = localStorage.getItem("staff_email");
 
     const renderCounsellorMessage = async (event) => {
       switch (event.type) {
@@ -121,6 +117,19 @@
           });
 
           if (response.status == "success") {
+            const response = await $.ajax({
+              url: "/chat/delete_stream_in_topic",
+              method: "POST",
+              dataType: "json",
+              data: JSON.stringify({
+                staff_netid: staffNetid,
+              }),
+            });
+
+            if (response.status == "success") {
+              console.log("Successfully delete the history");
+            }
+
             alert("You have successfully end the conversation.");
           } else {
             alert("Ops, Something wrong happened.");

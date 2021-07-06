@@ -97,3 +97,15 @@ class ZulipClient:
     def delete_stream(self, stream_id):
         response = self.client.delete_stream(stream_id)
         return response
+
+
+    def delete_stream_in_topic(self, stream_id, topic):
+        response = self.client.call_endpoint(
+            url=f'streams/{stream_id}/delete_topic',
+            method='POST',
+            request= {
+                'topic_name': topic,
+                'stream_id': stream_id,
+            }
+        )
+        return response
