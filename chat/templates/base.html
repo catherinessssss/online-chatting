@@ -68,6 +68,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        position: relative;
     }
 
     .top-right-side {
@@ -90,12 +91,11 @@
     }
 
     .top-sao-logo {
-        height: 8vw;
-        max-height: 60%;
         background: url('../static/Polly-graphics/general/SAO-logo.png') no-repeat center center;
         background-size: contain;
-        margin: 20px;
-        width: 30vw;
+        margin: 0 20px;
+        width: 33vw;
+        height: 60px;
     }
 
     .top-sao-icon {
@@ -109,30 +109,11 @@
         color: #f5ee31;
     }
 
-    @media (max-width: 576px) {
-        .top-description {
-            margin: 0;
-            font-size: 16;
-        }
-        .top-sao-icon {
-            margin: 0;
-            width: 80px;
-        }
-
-        .top-right-side {
-            margin: 10px;
-        }
-        .top-sao-logo {
-            height: 10vw;
-            margin: 10px;
-        }
-    }
-
     .service-description {
-      background-color: #fcead9;
-      width: 100%;
-      height: auto;
-      padding: 30px 50px;
+        background-color: #FCEAD9;
+        width: 100%;
+        height: auto;
+        padding: 30px 50px;
     }
 
     .copyright {
@@ -218,16 +199,33 @@
     }
 
     .botui-header {
-      position: sticky;
-      z-index: 1;
-      top: 0;
-      padding-top: 30%;
-      background: url("../static/Polly-graphics/general/general-top.png")
-        no-repeat;
-      background-size: contain;
-      -o-background-size: contain;
-      -moz-background-size: contain;
-      -webkit-background-size: contain;
+        padding-top: 120px; 
+        width: 100%;
+        background: url('../static/Polly-graphics/general/polly-full.png') no-repeat 60px 5px;
+        background-size: contain;
+        -o-background-size: contain;
+        -moz-background-size: contain;
+        -webkit-background-size: contain;
+        position: sticky;
+        z-index: 1;
+        top: 0;
+        background-color: #fcb040;
+        border-radius: 0 0 30px 30px;
+    }
+
+    .botui-header-text {
+        position: absolute;
+        top: 30px;
+        background: #522d54;
+        border-radius: 40px 35px 35px 15px;
+        width: 140px;
+        text-align: center;
+        padding: 10px 0 0px 0;
+        line-height: 10px;
+        font-size: 20px;
+        font-weight: 500;
+        color: #f1e202;
+        right: 20%;
     }
 
     .botui-message-content {
@@ -240,6 +238,37 @@
       background-color: #fccca5;
       color: #595a5a;
       border-radius: 10px 10px 10px 5px;
+    }
+
+    @media (max-width: 576px) {
+      .top-description {
+          margin: 0;
+          font-size: 16;
+      }
+      .top-sao-icon {
+          margin: 0;
+          width: 80px;
+      }
+
+      .top-right-side {
+          margin: 10px;
+      }
+      .top-sao-logo {
+          height: 30px;
+          margin: 10px;
+      }
+      .botui-header {
+          background: url(../static/Polly-graphics/general/polly-full.png) no-repeat 10px 5px;
+          background-size: contain;
+          background-color: #fcb040; 
+          padding-top: 90px;
+      }
+      .botui-header-text {
+          font-size: 13px;
+          width: 90px;
+          padding: 10px 0 0 0;
+          line-height: 0px;
+      }
     }
   </style>
 
@@ -263,20 +292,7 @@
       </div>
       <div class="service-description">
         <p>
-          The Counselling and Wellness Section (CWS) of the Student Affairs
-          Office (SAO) renders the timely and quality mental health support to
-          students of The Hong Kong Polytechnic University (PolyU) via the
-          non-face-to-face service mode besides the face-to-face platform.
-        </p>
-        <p>
-          CWS embarks the
-          <b><i>Counselling Chatbot Service, My Polly</i></b> which fit our
-          students’ need for the mental health service surpass accessibility;
-          students in distress can approach our various psychological services
-          through the “My Polly” Chatbot. This Chatbot serves the purpose of the
-          identification of students’ service need and the referral of
-          psychological services, i.e. online chat, face-to-face counselling and
-          online psychoeducation materials.
+          Welcome to the <b><i>Integrated Counselling Service</i></b>! We are here to recommend our psychological services that will suit your needs.   Let’s start and explore!
         </p>
       </div>
     </section>
